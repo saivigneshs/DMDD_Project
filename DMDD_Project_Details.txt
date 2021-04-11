@@ -1,5 +1,9 @@
 Test Message 1
+<<<<<<< HEAD
 
 
 
 Hi....
+=======
+Test Message 2
+>>>>>>> 425a281eb8ca1465beb20f92e1d011156aa5dc5a
