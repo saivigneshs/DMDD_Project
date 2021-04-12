@@ -2,7 +2,7 @@ set serveroutput on;
 begin
 DBMS_OUTPUT.PUT_LINE('DMDD Project');
 end;
-
+--Saivignesh Start
 CREATE TABLE LOCATION 
 (
   LOC_ID NUMBER PRIMARY KEY
@@ -22,8 +22,7 @@ CREATE TABLE SLOTS
 (
   SLOT_ID NUMBER PRIMARY KEY
 , DAY_OF_WEEK VARCHAR2(20)
-, SLOT_TIME TIMESTAMP
-, SUBLOC_ID NUMBER
+, SLOT_TIME TIMESTAMP0000
 , SLOT_COUNT NUMBER
 );
 
@@ -43,3 +42,9 @@ ALTER TABLE BOOKINGS
 ADD FOREIGN KEY (fm_id) REFERENCES fisherman(fm_id);
 ALTER TABLE BOOKINGS
 ADD FOREIGN KEY (slot_id) REFERENCES slots(slot_id);
+-- Saivignesh Ends
+-- Vignesh Start
+drop table fisherman_details;
+select * from fisherman_details;
+Insert into fish_species values(514,'Yellow Perch',112,20);
+--Vignesh End
