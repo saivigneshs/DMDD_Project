@@ -160,6 +160,11 @@ END;
 --- saivignesh ends
 
 
+---vishal
+
+CREATE ROLE FisheriesAdmin;
+
+
 
 
 
