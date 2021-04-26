@@ -166,7 +166,14 @@ CREATE ROLE FisheriesAdmin;
 
 CREATE ROLE Management;
 
+DROP ROLE Fisherman;--resolving git conflict
 
+DROP ROLE Prem_Biologist; --resolving git conflict
 
+CREATE ROLE Fisherman;
+
+CREATE ROLE Prem_Biologist;
+
+---Vishal END
 
 
