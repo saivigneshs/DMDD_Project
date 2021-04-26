@@ -164,6 +164,8 @@ END;
 
 CREATE ROLE FisheriesAdmin;
 
+CREATE ROLE Management;
+
 
 
 
