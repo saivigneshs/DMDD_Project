@@ -176,4 +176,11 @@ CREATE ROLE Prem_Biologist;
 
 ---Vishal END
 
+---Vishal Start
+grant create session, select any table, select any dictionary to FisheriesAdmin;
+grant update any table to FisheriesAdmin;
+grant insert any table to FisheriesAdmin;
+
+---Vishal Ends
+
 
