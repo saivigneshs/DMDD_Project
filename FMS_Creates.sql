@@ -159,8 +159,12 @@ BOOK_SLOT (2,101,po_book_id);
 END;
 --- saivignesh ends
 
+
 ---vishal
 
 CREATE ROLE FisheriesAdmin;
+
+
+
 
 
