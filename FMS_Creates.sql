@@ -210,3 +210,28 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON SCHEMA.FISH_SPECIES  TO Prem_Biologist;
 GRANT SELECT, INSERT, UPDATE, DELETE ON SCHEMA.FISH_STATS  TO Prem_Biologist;
 GRANT SELECT, INSERT, UPDATE, DELETE ON SCHEMA.LOC_STATS  TO Prem_Biologist;
 --vishal END
+
+---vishal start
+CREATE or replace VIEW CATCHQTY
+AS
+SELECT A.FM_ID,A.FIRST_NAME||''||A.lAST_NAME AS FISHERMAN_NAME,b.booking_id,c.checkin_id,sum(d.catch_qty) as Total_Catches
+FROM fisherman A
+INNER JOIN bookings B ON A.FM_ID=B.FM_ID
+INNER JOIN checkin_log C ON b.booking_id=c.booking_id
+INNER JOIN checkout_log D ON d.checkin_id=c.checkin_id
+group by a.fm_id,a.first_name, a.last_name, b.booking_id, c.checkin_id
+order by a.fm_id;
+
+------------
+CREATE VIEW CatchBYLocation
+AS
+(SELECT e.subloc_name,A.catch_qty---,B.checkin_id,c.booking_id,d.slot_id,e.subloc_id,A.checkin_id
+FROM checkout_log A
+INNER JOIN checkin_log B ON A.checkin_id=B.checkin_id
+INNER JOIN bookings C ON b.booking_id=c.booking_id
+INNER JOIN slots D ON c.slot_id=d.slot_id
+INNER JOIN sub_location E ON d.slot_id=e.subloc_id);
+
+SELECT
+    *
+FROM CatchBYLocation;
