@@ -55,6 +55,58 @@ CREATE OR REPLACE PROCEDURE ADD_FISHERMAN_DETAILS(pi_fm_id NUMBER, pi_addr1 VARC
             DBMS_OUTPUT.PUT_LINE(SQLERRM);       
 END ADD_FISHERMAN_DETAILS;
 /
+
+CREATE OR REPLACE PROCEDURE ADD_FISH_SPECIES(pi_FISH_ID NUMBER, pi_SPECIES_NAME VARCHAR2, pi_AVG_LENGTH FLOAT, pi_AVG_WEIGHTD FLOAT )
+    AS
+    ROW_CT NUMBER;
+    BEGIN  
+    select count(*) into ROW_CT from FISH_SPECIES where FISH_ID = pi_FISH_ID;
+    if(ROW_CT>0) then
+        dbms_output.put_line('RECORD '|| pi_FISH_ID ||' ALREADY EXISTS');
+    else    
+    INSERT INTO FISH_SPECIES (FISH_ID,SPECIES_NAME,AVG_LENGTH,ABG_WEIGHTD) values (pi_FISH_ID, pi_SPECIES_NAME,pi_AVG_LENGTH, pi_AVG_WEIGHTD );
+    dbms_output.put_line('RECORD '|| pi_FISH_ID || ' INSERTED SUCCESSFULLY'); 
+    end if;
+    EXCEPTION
+    WHEN DUP_VAL_ON_INDEX THEN
+        DBMS_OUTPUT.PUT_LINE('OH DEAR. I THINK IT IS TIME TO PANIC!');
+    WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE(SQLERRM); 
+        
+END ADD_FISH_SPECIES;
+/
+
+CREATE OR REPLACE PROCEDURE ADD_BOOKINGS(pi_BOOKING_ID NUMBER, pi_FM_ID NUMBER, pi_SLOT_ID NUMBER, pi_BOOKING_TIME TIMESTAMP, pi_BOOK_STATUS VARCHAR2)
+    AS
+    ROW_CT NUMBER;
+    BEGIN  
+    select count(*) into ROW_CT from BOOKINGS where FM_ID = pi_FM_ID;
+    if(ROW_CT>0) then
+        dbms_output.put_line('RECORD '|| pi_FM_ID ||' ALREADY EXISTS');
+    else    
+    INSERT INTO BOOKINGS (BOOKING_ID,FM_ID,SLOT_ID,BOOKING_TIME,BOOK_STATUS) values (pi_BOOKING_ID, pi_FM_ID,pi_SLOT_ID, pi_BOOKING_TIME,pi_BOOK_STATUS );
+    dbms_output.put_line('RECORD '|| pi_FM_ID || ' INSERTED SUCCESSFULLY'); 
+    end if;
+    EXCEPTION
+    WHEN DUP_VAL_ON_INDEX THEN
+        DBMS_OUTPUT.PUT_LINE('OH DEAR. I THINK IT IS TIME TO PANIC!');
+    WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE(SQLERRM); 
+        
+END ADD_BOOKINGS;
+/
+
+
+
+
+
+
+
+
+
+
+
+
 -------------------------- INSERT VALUES ----------------------------
 set serveroutput on;
 BEGIN
