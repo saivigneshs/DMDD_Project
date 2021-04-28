@@ -1,20 +1,62 @@
-CREATE OR REPLACE PACKAGE INSERT_VALUES
+CREATE OR REPLACE PROCEDURE ADD_LOCATION(pi_loc_id NUMBER, pi_loc_name VARCHAR2)
     AS
-        PROCEDURE ADD_LOCATION(L_CITY IN VARCHAR2, L_STATE IN VARCHAR2, L_ZIPCODE IN NUMBER);
-        PROCEDURE ADD_TEST_CENTER(L_CENTER_NAME IN VARCHAR2, L_LOCATION_ID IN NUMBER, L_CENTER_HEAD IN NUMBER);
-        PROCEDURE ADD_GROUPS(L_GROUPS_NAME IN VARCHAR2, L_GROUPS_DESCRIPTION IN VARCHAR2);
-        PROCEDURE ADD_ROLES(L_ROLES_DESCRIPTION IN VARCHAR2);
-        PROCEDURE ADD_GROUP_ROLES(L_GROUPS_ID IN NUMBER, L_ROLES_ID IN NUMBER);
-        PROCEDURE SIGNUP (user_f_name VARCHAR, user_l_name VARCHAR, user_dob DATE, user_email VARCHAR, user_pwd VARCHAR, 
-            user_phone NUMBER, user_city VARCHAR, user_state VARCHAR, user_zip VARCHAR, user_emergency_contact  VARCHAR);
-        PROCEDURE ADD_TEST_AVAILABILITY(L_TEST_CENTER_ID IN NUMBER, L_SLOTS_ID IN NUMBER, L_TEST_TYPE_ID IN NUMBER);
-        PROCEDURE ADD_STAFF_TIMESHEET(L_USER_ID IN NUMBER, L_CENTER_ID IN NUMBER, L_SLOT_ID IN NUMBER);
-        PROCEDURE ADD_QUARANTINE_FACILITY(L_QUARANTINE_FACILITY_NAME IN VARCHAR2, L_ROOMS_AVAILABILITY IN NUMBER, L_DOCTOR_ID IN NUMBER, L_LOCATION_ID IN NUMBER);
-        PROCEDURE ADD_QUARANTINED_PATIENT_DETAILS(L_QUARANTINED_FACILITY_ID IN NUMBER, L_USER_ID IN NUMBER, L_JOIN_DATE IN DATE);
-        PROCEDURE ADD_SLOTS(S_NAME IN VARCHAR2, S_TIME IN TIMESTAMP, S_AVAILABLE IN NUMBER);
-        PROCEDURE ADD_TEST_TYPE(T_TEST_TYPE VARCHAR2);
-        PROCEDURE ADD_USER_LOGIN_AUDIT(U_USER_ID IN NUMBER, U_LOGIN_STATUS IN VARCHAR2, U_AUDIT_DATE IN DATE);
-        PROCEDURE ADD_TEST_SCHEDULE(TS_USER_ID IN NUMBER,TS_DATE DATE,TS_SLOT_ID NUMBER, TS_CENTER_ID NUMBER, TS_TEST_TYPE_ID NUMBER, TS_SCHEDULE_STATUS VARCHAR2, TS_TEST_RESULTS VARCHAR2);
-    
-    END INSERT_VALUES;
+    ROW_CT NUMBER;
+    BEGIN  
+    select count(*) into ROW_CT from LOCATION where loc_name = pi_loc_name and loc_id = pi_loc_id;
+    if(ROW_CT>0) then
+        dbms_output.put_line('RECORD '|| pi_loc_id ||' ALREADY EXISTS');
+    else    
+    INSERT INTO location (LOC_ID,LOC_NAME) values (pi_loc_id, pi_loc_name);
+    dbms_output.put_line('RECORD '|| pi_loc_id || ' INSERTED SUCCESSFULLY');
+    end if;
+    EXCEPTION
+    WHEN DUP_VAL_ON_INDEX THEN
+        DBMS_OUTPUT.PUT_LINE('OH DEAR. I THINK IT IS TIME TO PANIC!');
+    WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE(SQLERRM); 
+        
+END ADD_LOCATION;
 /
+
+set serveroutput on;
+BEGIN
+add_location(1,'Charles River');
+add_location(2,'Quabbin Lake');
+add_location(3,'LLMC Fish Pier');
+END;    
+
+select * from location;
+
+--PROC for booking a slot --
+
+Create or replace procedure Book_slot (pi_fm_id int, pi_slot_id int, po_booking_id out int)
+as 
+slot_ct int := 0;
+BEGIN
+select slot_count into slot_ct from "SLOTS" where slot_id = pi_slot_id;
+if slot_ct <= 0
+then
+dbms_output.Put_line('This Slot is currently full. Please try a different slot.');
+return;
+elsif slot_ct between 1 and 8
+then
+dbms_output.Put_line('Very few slots are available, Hurry up!');
+return;
+else
+SELECT MAX(booking_id)+1 into po_booking_id FROM "BOOKINGS";
+insert into bookings(booking_id, fm_id, slot_id, booking_time, book_status) values(po_booking_id,pi_fm_id,pi_slot_id,sysdate,'SUCCESS');
+dbms_output.Put_line('Booked Slot ' || pi_slot_id || ' Successfully! '|| po_booking_id); 
+update slots set slot_count = slot_ct - 1 where slot_id = pi_slot_id; 
+dbms_output.Put_line('Updated Slots Table for ' || pi_slot_id || ' Successfully! '); 
+end if;
+END;
+
+select * from fisherman where fm_id = '2';
+--2	Dean	Bradley	46	M	3	(774) 350-3917	erat.Vivamus@ac.net
+select * from slots where slot_id = '101';
+--101	Tuesday	01-APR-21 06.00.00.000000000 AM	12	
+select * from bookings where booking_id= '301';	
+declare po_book_id INT := 0;
+BEGIN
+BOOK_SLOT (2,101,po_book_id);
+END;
