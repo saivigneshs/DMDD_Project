@@ -953,3 +953,44 @@ declare po_book_id INT := 0;
 BEGIN
 BOOK_SLOT (2,101,po_book_id);
 END;
+
+
+--View Creation------
+
+CREATE or replace VIEW CatchBYLocation
+AS
+(SELECT f.loc_name,sum(a.catch_qty)as Total_Catches ---,B.checkin_id,c.booking_id,d.slot_id,e.subloc_id,A.checkin_id
+FROM checkout_log A
+INNER JOIN checkin_log B ON a.checkin_id=b.checkin_id
+INNER JOIN bookings C ON b.booking_id=c.booking_id
+INNER JOIN slots D ON c.slot_id=d.slot_id
+INNER JOIN sub_location E ON d.subloc_id=e.subloc_id
+INNER JOIN location F ON e.loc_id=f.loc_id
+group by f.loc_name);
+
+
+CREATE or replace VIEW CATCHQTY
+AS
+SELECT A.FM_ID,A.FIRST_NAME||''||A.lAST_NAME AS FISHERMAN_NAME,b.booking_id,c.checkin_id,sum(d.catch_qty) as Total_Catches
+FROM fisherman A
+INNER JOIN bookings B ON A.FM_ID=B.FM_ID
+INNER JOIN checkin_log C ON b.booking_id=c.booking_id
+INNER JOIN checkout_log D ON d.checkin_id=c.checkin_id
+group by a.fm_id,a.first_name, a.last_name, b.booking_id, c.checkin_id
+order by a.fm_id;
+
+
+CREATE or REPLACE VIEW lastfeeddatebyspeciesname
+AS
+SELECT a.species_name,i.last_feed_date
+FROM fish_species A
+INNER JOIN fish_stats B ON a.fish_id=b.fish_id
+INNER JOIN checkout_log C ON b.fish_inv_id=c.fish_inv_id
+INNER JOIN checkin_log D ON c.checkin_id=d.checkin_id
+INNER JOIN bookings E ON d.booking_id=e.booking_id
+INNER JOIN slots F ON f.slot_id=e.slot_id
+INNER JOIN sub_location G ON f.subloc_id=g.subloc_id
+INNER JOIN location H ON g.loc_id=h.loc_id
+INNER JOIN loc_stats I ON h.loc_id=i.loc_id
+group by a.species_name,i.last_feed_date
+order by i.last_feed_date;
