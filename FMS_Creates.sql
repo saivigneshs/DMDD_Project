@@ -260,3 +260,20 @@ order by i.last_feed_date
 SELECT
     *
 FROM lastfeeddatebyspeciesname;
+
+
+
+-------------
+CREATE OR REPLACE VIEW populor_fish
+AS
+SELECT a.species_name,sum(c.catch_qty)as Total_Catches
+FROM fish_species A
+INNER JOIN fish_stats B ON a.fish_id=b.fish_id
+INNER JOIN checkout_log C ON b.fish_inv_id=C.fish_inv_id
+GROUP BY a.species_name
+ORDER BY Total_Catches desc
+;
+
+SELECT
+*
+FROM populor_fish;
