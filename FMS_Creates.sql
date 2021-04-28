@@ -239,4 +239,24 @@ group by f.loc_name);
 
 SELECT
     *
-FROM CatchBYLocation
+FROM CatchBYLocation;
+
+CREATE or REPLACE VIEW lastfeeddatebyspeciesname
+AS
+SELECT a.species_name,i.last_feed_date
+FROM fish_species A
+INNER JOIN fish_stats B ON a.fish_id=b.fish_id
+INNER JOIN checkout_log C ON b.fish_inv_id=c.fish_inv_id
+INNER JOIN checkin_log D ON c.checkin_id=d.checkin_id
+INNER JOIN bookings E ON d.booking_id=e.booking_id
+INNER JOIN slots F ON f.slot_id=e.slot_id
+INNER JOIN sub_location G ON f.subloc_id=g.subloc_id
+INNER JOIN location H ON g.loc_id=h.loc_id
+INNER JOIN loc_stats I ON h.loc_id=i.loc_id
+group by a.species_name,i.last_feed_date
+order by i.last_feed_date
+;
+
+SELECT
+    *
+FROM lastfeeddatebyspeciesname;
