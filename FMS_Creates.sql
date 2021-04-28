@@ -24,7 +24,10 @@ CREATE TABLE SLOTS
 , DAY_OF_WEEK VARCHAR2(20)
 , SLOT_TIME TIMESTAMP
 , SLOT_COUNT NUMBER
+
 );
+
+
 
 CREATE TABLE LOC_STATS 
 (
@@ -223,15 +226,17 @@ group by a.fm_id,a.first_name, a.last_name, b.booking_id, c.checkin_id
 order by a.fm_id;
 
 ------------
-CREATE VIEW CatchBYLocation
+CREATE or replace VIEW CatchBYLocation
 AS
-(SELECT e.subloc_name,A.catch_qty---,B.checkin_id,c.booking_id,d.slot_id,e.subloc_id,A.checkin_id
+(SELECT f.loc_name,sum(a.catch_qty)as Total_Catches ---,B.checkin_id,c.booking_id,d.slot_id,e.subloc_id,A.checkin_id
 FROM checkout_log A
-INNER JOIN checkin_log B ON A.checkin_id=B.checkin_id
+INNER JOIN checkin_log B ON a.checkin_id=b.checkin_id
 INNER JOIN bookings C ON b.booking_id=c.booking_id
 INNER JOIN slots D ON c.slot_id=d.slot_id
-INNER JOIN sub_location E ON d.slot_id=e.subloc_id);
+INNER JOIN sub_location E ON d.subloc_id=e.subloc_id
+INNER JOIN location F ON e.loc_id=f.loc_id
+group by f.loc_name);
 
 SELECT
     *
-FROM CatchBYLocation;
+FROM CatchBYLocation
