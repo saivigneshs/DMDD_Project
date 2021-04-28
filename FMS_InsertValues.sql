@@ -55,6 +55,84 @@ CREATE OR REPLACE PROCEDURE ADD_FISHERMAN_DETAILS(pi_fm_id NUMBER, pi_addr1 VARC
             DBMS_OUTPUT.PUT_LINE(SQLERRM);       
 END ADD_FISHERMAN_DETAILS;
 /
+
+CREATE OR REPLACE PROCEDURE ADD_FISH_SPECIES(pi_FISH_ID NUMBER, pi_SPECIES_NAME VARCHAR2, pi_AVG_LENGTH FLOAT, pi_AVG_WEIGHTD FLOAT )
+    AS
+    ROW_CT NUMBER;
+    BEGIN  
+    select count(*) into ROW_CT from FISH_SPECIES where FISH_ID = pi_FISH_ID;
+    if(ROW_CT>0) then
+        dbms_output.put_line('RECORD '|| pi_FISH_ID ||' ALREADY EXISTS');
+    else    
+    INSERT INTO FISH_SPECIES (FISH_ID,SPECIES_NAME,AVG_LENGTH,ABG_WEIGHTD) values (pi_FISH_ID, pi_SPECIES_NAME,pi_AVG_LENGTH, pi_AVG_WEIGHTD );
+    dbms_output.put_line('RECORD '|| pi_FISH_ID || ' INSERTED SUCCESSFULLY'); 
+    end if;
+    EXCEPTION
+    WHEN DUP_VAL_ON_INDEX THEN
+        DBMS_OUTPUT.PUT_LINE('OH DEAR. I THINK IT IS TIME TO PANIC!');
+    WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE(SQLERRM); 
+        
+END ADD_FISH_SPECIES;
+/
+
+CREATE OR REPLACE PROCEDURE ADD_BOOKINGS(pi_BOOKING_ID NUMBER, pi_FM_ID NUMBER, pi_SLOT_ID NUMBER, pi_BOOKING_TIME TIMESTAMP, pi_BOOK_STATUS VARCHAR2)
+    AS
+    ROW_CT NUMBER;
+    BEGIN  
+    select count(*) into ROW_CT from BOOKINGS where FM_ID = pi_FM_ID;
+    if(ROW_CT>0) then
+        dbms_output.put_line('RECORD '|| pi_FM_ID ||' ALREADY EXISTS');
+    else    
+    INSERT INTO BOOKINGS (BOOKING_ID,FM_ID,SLOT_ID,BOOKING_TIME,BOOK_STATUS) values (pi_BOOKING_ID, pi_FM_ID,pi_SLOT_ID, pi_BOOKING_TIME,pi_BOOK_STATUS );
+    dbms_output.put_line('RECORD '|| pi_FM_ID || ' INSERTED SUCCESSFULLY'); 
+    end if;
+    EXCEPTION
+    WHEN DUP_VAL_ON_INDEX THEN
+        DBMS_OUTPUT.PUT_LINE('OH DEAR. I THINK IT IS TIME TO PANIC!');
+    WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE(SQLERRM); 
+        
+END ADD_BOOKINGS;
+/
+CREATE OR REPLACE PROCEDURE ADD_slots(pi_SLOT_ID NUMBER, pi_DAY_OF_WEEK VARCHAR2, pi_SLOT_TIME TIMESTAMP, pi_SLOT_COUNT NUMBER, pi_SUBLOC_ID NUMBER)
+    AS
+    ROW_CT NUMBER;
+    BEGIN  
+    select count(*) into ROW_CT from slots where SLOT_ID = pi_SLOT_ID;
+    if(ROW_CT>0) then
+        dbms_output.put_line('RECORD '|| pi_SLOT_ID ||' ALREADY EXISTS');
+    else    
+    INSERT INTO slots (SLOT_ID,DAY_OF_WEEK,SLOT_TIME,SLOT_COUNT,SUBLOC_ID) values (pi_SLOT_ID, pi_DAY_OF_WEEK,pi_SLOT_TIME, pi_SLOT_COUNT,pi_SUBLOC_ID );
+    dbms_output.put_line('RECORD '|| pi_SLOT_ID || ' INSERTED SUCCESSFULLY'); 
+    end if;
+    EXCEPTION
+    WHEN DUP_VAL_ON_INDEX THEN
+        DBMS_OUTPUT.PUT_LINE('OH DEAR. I THINK IT IS TIME TO PANIC!');
+    WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE(SQLERRM); 
+        
+END ADD_slots;
+/
+CREATE OR REPLACE PROCEDURE ADD_SUB_LOCATION(pi_SUBLOC_ID NUMBER, pi_SUBLOC_NAME VARCHAR2, pi_LOC_ID NUMBER)
+    AS
+    ROW_CT NUMBER;
+    BEGIN  
+    select count(*) into ROW_CT from SUB_LOCATION where SUBLOC_ID = pi_SUBLOC_ID;
+    if(ROW_CT>0) then
+        dbms_output.put_line('RECORD '|| pi_SUBLOC_ID ||' ALREADY EXISTS');
+    else    
+    INSERT INTO SUB_LOCATION (SUBLOC_ID,SUBLOC_NAME,LOC_ID) values (pi_SUBLOC_ID, pi_SUBLOC_NAME,pi_LOC_ID);
+    dbms_output.put_line('RECORD '|| pi_SUBLOC_ID || ' INSERTED SUCCESSFULLY'); 
+    end if;
+    EXCEPTION
+    WHEN DUP_VAL_ON_INDEX THEN
+        DBMS_OUTPUT.PUT_LINE('OH DEAR. I THINK IT IS TIME TO PANIC!');
+    WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE(SQLERRM); 
+        
+END ADD_SUB_LOCATION;
+
 -------------------------- INSERT VALUES ----------------------------
 set serveroutput on;
 BEGIN
@@ -469,6 +547,379 @@ add_fisherman_details(199,'397-4275 At Street','P.O. Box 112, 4571 Dui, Rd.','Fo
 add_fisherman_details(200,'P.O. Box 269, 2813 Nec Av.','4694 Aliquam Avenue','Moignelee','NA','8421 IO');
 END;
 
+BEGIN
+add_fish_species(500,'Perch',144,10);
+add_fish_species(501,'Smelt',139,4);
+add_fish_species(502,'Sturgeon',136,2);
+add_fish_species(503,'Burbot',26,10);
+add_fish_species(504,'Mackarel',49,1);
+add_fish_species(505,'Winter Flounder',144,1);
+add_fish_species(506,'Scup',53,1);
+add_fish_species(507,'Black Sea Bass',59,13);
+add_fish_species(508,'Brown Trout',106,15);
+add_fish_species(509,'Largemouth Bass',134,14);
+add_fish_species(510,'Bluegill',108,17);
+add_fish_species(511,'Striped Bass',92,20);
+add_fish_species(512,'Carp',135,20);
+add_fish_species(513,'White Catfish',92,15);
+add_fish_species(514,'Yellow Perch',112,20);
+END;
+
+
+BEGIN
+add_bookings(100,64,117,to_timestamp('23-FEB-21 05.02.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(101,21,212,to_timestamp('21-APR-20 05.52.29.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(102,56,219,to_timestamp('29-APR-21 07.36.13.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(103,194,105,to_timestamp('23-JUL-20 11.08.12.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(104,66,177,to_timestamp('03-MAY-20 06.38.38.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(105,181,198,to_timestamp('10-FEB-21 04.15.15.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(106,190,219,to_timestamp('21-MAR-20 06.54.08.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(107,70,197,to_timestamp('21-SEP-20 07.22.44.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(108,102,160,to_timestamp('18-OCT-20 11.25.29.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(109,135,147,to_timestamp('09-APR-21 02.02.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(110,22,200,to_timestamp('28-DEC-20 10.45.16.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(111,149,161,to_timestamp('23-MAR-20 11.04.54.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(112,113,142,to_timestamp('01-SEP-20 06.56.29.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(113,147,184,to_timestamp('01-JAN-21 03.20.33.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(114,86,225,to_timestamp('16-MAY-20 08.02.08.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(115,88,144,to_timestamp('09-MAY-20 06.52.56.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(116,119,144,to_timestamp('06-APR-20 09.57.15.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(117,65,153,to_timestamp('31-AUG-20 04.22.53.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(118,54,174,to_timestamp('28-NOV-20 02.45.01.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(119,100,168,to_timestamp('25-JAN-21 12.27.14.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(120,83,196,to_timestamp('12-APR-21 01.37.01.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(121,8,129,to_timestamp('16-FEB-21 02.19.36.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(122,9,115,to_timestamp('10-MAY-20 07.48.05.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(123,142,111,to_timestamp('30-JAN-21 01.56.27.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(124,99,194,to_timestamp('19-NOV-20 01.02.12.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(125,60,208,to_timestamp('14-JUN-20 10.12.33.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(126,163,222,to_timestamp('20-APR-21 09.02.13.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(127,183,102,to_timestamp('17-APR-20 08.23.18.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(128,174,116,to_timestamp('23-JUL-20 04.13.58.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(129,173,207,to_timestamp('30-JUN-20 05.04.02.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(130,47,224,to_timestamp('01-SEP-20 07.21.31.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(131,177,118,to_timestamp('28-MAY-20 08.21.52.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(132,82,145,to_timestamp('21-MAR-21 11.16.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(133,193,210,to_timestamp('12-NOV-20 03.55.59.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(134,110,206,to_timestamp('07-APR-21 08.34.11.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(135,91,205,to_timestamp('31-OCT-20 02.41.48.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(136,167,148,to_timestamp('24-APR-21 11.32.33.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(137,89,201,to_timestamp('24-APR-20 07.24.35.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(138,43,193,to_timestamp('03-JUN-20 03.27.40.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(139,118,223,to_timestamp('27-SEP-20 08.26.39.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(140,200,221,to_timestamp('06-MAY-20 07.22.03.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(141,169,154,to_timestamp('13-AUG-20 03.36.29.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(142,32,137,to_timestamp('27-MAR-20 06.33.25.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(143,58,173,to_timestamp('29-SEP-20 09.33.08.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(144,87,111,to_timestamp('09-JUL-20 12.30.29.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(145,160,194,to_timestamp('12-DEC-20 07.56.45.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(146,150,116,to_timestamp('06-OCT-20 10.32.28.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(147,33,201,to_timestamp('21-MAY-20 12.56.57.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(148,152,115,to_timestamp('24-FEB-21 06.01.13.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(149,73,154,to_timestamp('16-APR-20 12.54.58.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(150,136,107,to_timestamp('07-NOV-20 09.18.10.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(151,81,117,to_timestamp('11-AUG-20 09.36.42.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(152,182,163,to_timestamp('14-JAN-21 02.35.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(153,5,198,to_timestamp('12-NOV-20 04.54.44.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(154,191,188,to_timestamp('05-AUG-20 09.25.06.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(155,41,169,to_timestamp('12-MAR-21 04.33.08.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(156,198,206,to_timestamp('21-MAY-20 09.37.55.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(157,145,144,to_timestamp('23-DEC-20 11.34.58.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(158,170,166,to_timestamp('04-AUG-20 02.21.49.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(159,10,110,to_timestamp('30-JAN-21 02.42.57.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(160,189,101,to_timestamp('18-DEC-20 07.24.06.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(161,39,107,to_timestamp('04-OCT-20 12.52.28.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(162,178,139,to_timestamp('29-OCT-20 11.49.18.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(163,134,126,to_timestamp('10-JAN-21 08.14.28.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(164,117,144,to_timestamp('15-APR-21 08.27.43.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(165,141,102,to_timestamp('19-JUL-20 12.49.08.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(166,187,192,to_timestamp('28-DEC-20 01.54.10.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(167,127,103,to_timestamp('26-MAR-21 06.18.10.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(168,162,172,to_timestamp('07-AUG-20 10.56.05.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(169,27,143,to_timestamp('26-MAR-20 05.20.57.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(170,13,212,to_timestamp('25-JUN-20 06.19.28.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(171,101,192,to_timestamp('06-JUL-20 12.00.23.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(172,115,110,to_timestamp('25-FEB-21 05.35.32.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(173,156,196,to_timestamp('05-APR-21 07.48.39.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(174,133,180,to_timestamp('29-MAY-20 05.16.24.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(175,151,185,to_timestamp('11-JUL-20 02.52.21.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(176,175,208,to_timestamp('14-MAY-20 07.01.04.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(177,107,205,to_timestamp('21-OCT-20 11.09.35.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(178,122,115,to_timestamp('16-FEB-21 07.32.21.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(179,104,129,to_timestamp('21-OCT-20 10.51.05.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(180,48,139,to_timestamp('26-OCT-20 12.30.45.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(181,172,169,to_timestamp('22-JUN-20 12.55.37.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(182,188,160,to_timestamp('09-MAR-21 06.00.04.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(183,171,143,to_timestamp('24-NOV-20 01.39.38.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(184,12,180,to_timestamp('15-MAR-21 11.34.15.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(185,164,106,to_timestamp('16-APR-20 09.31.22.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(186,109,152,to_timestamp('05-SEP-20 06.43.08.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(187,103,210,to_timestamp('16-DEC-20 03.22.26.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(188,57,216,to_timestamp('12-APR-21 10.52.53.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(189,114,115,to_timestamp('18-JAN-21 07.33.58.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(190,34,105,to_timestamp('19-JUL-20 03.44.34.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(191,112,223,to_timestamp('23-MAY-20 04.05.02.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(192,37,181,to_timestamp('29-MAR-20 11.28.38.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(193,23,153,to_timestamp('19-DEC-20 06.14.09.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(194,153,190,to_timestamp('12-DEC-20 09.49.26.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(195,90,127,to_timestamp('28-MAR-21 03.16.59.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(196,179,181,to_timestamp('13-AUG-20 12.51.37.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(197,106,139,to_timestamp('03-MAY-20 10.52.25.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(198,4,179,to_timestamp('25-MAY-20 12.23.14.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(199,16,144,to_timestamp('28-NOV-20 10.44.41.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(200,55,171,to_timestamp('06-SEP-20 07.54.59.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(201,6,124,to_timestamp('21-APR-21 10.33.21.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(202,68,101,to_timestamp('11-JUL-20 03.02.51.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(203,85,185,to_timestamp('16-APR-21 04.06.37.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(204,20,223,to_timestamp('03-AUG-20 04.30.24.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(205,78,159,to_timestamp('29-MAR-20 09.45.41.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(206,139,216,to_timestamp('24-MAR-21 08.59.31.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(207,50,203,to_timestamp('04-SEP-20 07.56.19.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(208,124,170,to_timestamp('19-JUN-20 01.08.21.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(209,46,161,to_timestamp('20-APR-20 11.00.42.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(210,132,118,to_timestamp('02-APR-20 06.36.43.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(211,11,117,to_timestamp('13-JUL-20 01.00.39.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(212,42,105,to_timestamp('11-OCT-20 01.02.42.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(213,94,119,to_timestamp('22-JUL-20 06.51.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(214,80,105,to_timestamp('10-APR-21 11.02.54.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(215,195,130,to_timestamp('04-JUN-20 08.38.04.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(216,148,184,to_timestamp('02-SEP-20 09.14.09.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(217,18,166,to_timestamp('06-MAR-21 12.26.07.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(218,93,159,to_timestamp('12-JUN-20 04.39.17.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(219,72,220,to_timestamp('26-MAR-21 04.48.20.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(220,196,199,to_timestamp('03-OCT-20 03.35.20.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(221,44,129,to_timestamp('20-JUL-20 10.07.44.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(222,69,180,to_timestamp('10-JUL-20 05.41.13.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(223,95,122,to_timestamp('04-MAY-20 12.58.35.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(224,197,225,to_timestamp('15-MAR-20 10.37.49.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(225,40,113,to_timestamp('20-SEP-20 06.15.18.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(226,116,183,to_timestamp('03-DEC-20 07.56.37.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(227,45,119,to_timestamp('27-OCT-20 01.30.15.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(228,192,118,to_timestamp('25-NOV-20 12.19.37.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(229,121,150,to_timestamp('26-NOV-20 07.54.27.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(230,186,113,to_timestamp('08-JUL-20 12.54.34.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(231,51,155,to_timestamp('29-MAR-20 02.49.08.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(232,184,101,to_timestamp('29-JUN-20 02.52.20.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(233,15,191,to_timestamp('31-MAR-21 03.25.59.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(234,176,172,to_timestamp('05-MAY-20 06.32.58.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(235,130,167,to_timestamp('23-SEP-20 06.39.35.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(236,79,204,to_timestamp('16-AUG-20 08.30.43.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(237,36,179,to_timestamp('10-MAR-20 07.00.45.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(238,84,189,to_timestamp('05-JAN-21 09.01.42.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(239,126,206,to_timestamp('06-AUG-20 03.12.53.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(240,125,192,to_timestamp('29-SEP-20 03.16.23.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(241,14,195,to_timestamp('31-JUL-20 04.09.38.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(242,129,148,to_timestamp('21-OCT-20 03.48.18.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(243,75,102,to_timestamp('30-APR-20 12.47.15.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(244,140,156,to_timestamp('06-JUN-20 05.50.01.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(245,146,182,to_timestamp('11-NOV-20 08.50.05.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(246,155,161,to_timestamp('28-MAR-21 05.40.16.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(247,76,153,to_timestamp('01-JUL-20 03.14.05.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(248,105,182,to_timestamp('21-AUG-20 01.05.45.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(249,52,135,to_timestamp('10-APR-21 12.20.18.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(250,92,141,to_timestamp('16-MAR-20 05.13.26.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(251,138,137,to_timestamp('20-JAN-21 06.08.40.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(252,61,184,to_timestamp('23-JUN-20 12.07.12.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(253,29,223,to_timestamp('15-JAN-21 08.22.33.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(254,168,131,to_timestamp('24-MAR-21 01.11.11.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(255,120,128,to_timestamp('19-JUN-20 05.31.33.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(256,158,112,to_timestamp('05-NOV-20 08.29.21.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(257,3,150,to_timestamp('10-MAY-20 12.17.57.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(258,67,211,to_timestamp('06-FEB-21 05.20.20.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(259,185,151,to_timestamp('27-JUL-20 03.54.34.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(260,137,211,to_timestamp('23-OCT-20 09.38.08.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(261,17,104,to_timestamp('21-AUG-20 12.07.42.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(262,161,159,to_timestamp('06-JUN-20 12.54.13.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(263,157,195,to_timestamp('06-FEB-21 06.25.32.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(264,59,213,to_timestamp('26-DEC-20 03.41.49.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(265,35,151,to_timestamp('09-OCT-20 02.31.05.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(266,166,199,to_timestamp('19-MAR-21 01.50.58.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(267,97,150,to_timestamp('04-FEB-21 07.25.50.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(268,26,153,to_timestamp('25-JAN-21 04.39.39.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'SUCCESS');
+add_bookings(269,144,183,to_timestamp('15-JAN-21 09.17.30.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'PENDING');
+add_bookings(270,63,132,to_timestamp('16-MAR-20 08.50.58.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'PENDING');
+add_bookings(271,7,140,to_timestamp('04-APR-21 01.26.52.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'PENDING');
+add_bookings(272,31,109,to_timestamp('06-OCT-20 09.22.45.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'PENDING');
+add_bookings(273,53,130,to_timestamp('12-APR-20 01.27.50.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'PENDING');
+add_bookings(274,143,221,to_timestamp('23-FEB-21 09.35.01.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'PENDING');
+add_bookings(275,98,146,to_timestamp('03-JAN-21 03.25.46.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'PENDING');
+add_bookings(276,165,168,to_timestamp('13-MAY-20 09.15.45.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'PENDING');
+add_bookings(277,71,178,to_timestamp('27-MAR-21 10.51.05.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'PENDING');
+add_bookings(278,199,138,to_timestamp('27-MAR-21 08.37.35.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'PENDING');
+add_bookings(279,74,167,to_timestamp('09-NOV-20 03.31.48.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'PENDING');
+add_bookings(280,19,186,to_timestamp('18-JUL-20 10.44.34.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'PENDING');
+add_bookings(281,1,111,to_timestamp('16-DEC-20 09.18.41.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'PENDING');
+add_bookings(282,96,196,to_timestamp('13-OCT-20 08.42.02.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'PENDING');
+add_bookings(283,62,120,to_timestamp('15-MAY-20 12.30.29.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'PENDING');
+add_bookings(284,154,218,to_timestamp('11-JUN-20 10.40.52.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'PENDING');
+add_bookings(285,180,129,to_timestamp('06-NOV-20 02.04.58.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'PENDING');
+add_bookings(286,38,180,to_timestamp('05-OCT-20 07.16.34.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'PENDING');
+add_bookings(287,2,195,to_timestamp('16-JUN-20 03.02.46.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'PENDING');
+add_bookings(288,128,106,to_timestamp('11-AUG-20 12.58.53.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'PENDING');
+add_bookings(289,77,201,to_timestamp('25-JAN-21 05.17.07.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'PENDING');
+add_bookings(290,25,128,to_timestamp('04-APR-20 09.25.17.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'FAILURE');
+add_bookings(291,111,156,to_timestamp('15-MAR-21 07.14.17.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'FAILURE');
+add_bookings(292,24,206,to_timestamp('26-APR-20 02.45.38.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'FAILURE');
+add_bookings(293,131,113,to_timestamp('19-SEP-20 06.15.35.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'FAILURE');
+add_bookings(294,159,197,to_timestamp('16-NOV-20 01.29.20.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'FAILURE');
+add_bookings(295,30,182,to_timestamp('14-DEC-20 04.35.47.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'FAILURE');
+add_bookings(296,49,112,to_timestamp('22-MAY-20 08.20.12.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'FAILURE');
+add_bookings(297,123,107,to_timestamp('25-SEP-20 04.50.09.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'FAILURE');
+add_bookings(298,108,218,to_timestamp('23-MAR-21 08.55.55.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),'FAILURE');
+add_bookings(299,28,126,to_timestamp('02-JUN-20 12.05.51.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),'FAILURE');
+END;
+
+BEGIN
+add_slots(100,'Monday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),11,10);
+add_slots(101,'Tuesday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),11,10);
+add_slots(102,'Wednesday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),19,10);
+add_slots(103,'Thursday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),1,10);
+add_slots(104,'Friday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),9,10);
+add_slots(105,'Saturday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),16,10);
+add_slots(106,'Sunday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),0,10);
+add_slots(107,'Monday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),14,10);
+add_slots(108,'Tuesday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),16,10);
+add_slots(109,'Wednesday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),15,10);
+add_slots(110,'Thursday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),17,10);
+add_slots(111,'Friday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),9,10);
+add_slots(112,'Saturday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),14,10);
+add_slots(113,'Sunday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),11,10);
+add_slots(114,'Monday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),0,11);
+add_slots(115,'Tuesday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),6,11);
+add_slots(116,'Wednesday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),18,11);
+add_slots(117,'Thursday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),16,11);
+add_slots(118,'Friday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),3,11);
+add_slots(119,'Saturday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),5,11);
+add_slots(120,'Sunday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),14,11);
+add_slots(121,'Monday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),13,11);
+add_slots(122,'Tuesday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),12,11);
+add_slots(123,'Wednesday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),11,11);
+add_slots(124,'Thursday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),3,11);
+add_slots(125,'Friday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),20,11);
+add_slots(126,'Saturday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),12,11);
+add_slots(127,'Sunday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),2,11);
+add_slots(128,'Monday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),18,12);
+add_slots(129,'Tuesday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),4,12);
+add_slots(130,'Wednesday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),10,12);
+add_slots(131,'Thursday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),14,12);
+add_slots(132,'Friday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),18,12);
+add_slots(133,'Saturday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),10,12);
+add_slots(134,'Sunday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),20,12);
+add_slots(135,'Monday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),12,12);
+add_slots(136,'Tuesday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),16,12);
+add_slots(137,'Wednesday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),10,12);
+add_slots(138,'Thursday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),20,12);
+add_slots(139,'Friday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),18,12);
+add_slots(140,'Saturday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),17,12);
+add_slots(141,'Sunday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),3,12);
+add_slots(142,'Monday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),5,13);
+add_slots(143,'Tuesday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),19,13);
+add_slots(144,'Wednesday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),13,13);
+add_slots(145,'Thursday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),8,13);
+add_slots(146,'Friday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),3,13);
+add_slots(147,'Saturday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),10,13);
+add_slots(148,'Sunday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),11,13);
+add_slots(149,'Monday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),14,13);
+add_slots(150,'Tuesday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),5,13);
+add_slots(151,'Wednesday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),0,13);
+add_slots(152,'Thursday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),8,13);
+add_slots(153,'Friday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),20,13);
+add_slots(154,'Saturday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),12,13);
+add_slots(155,'Sunday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),7,13);
+add_slots(156,'Monday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),20,14);
+add_slots(157,'Tuesday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),4,14);
+add_slots(158,'Wednesday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),2,14);
+add_slots(159,'Thursday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),8,14);
+add_slots(160,'Friday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),13,14);
+add_slots(161,'Saturday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),20,14);
+add_slots(162,'Sunday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),15,14);
+add_slots(163,'Monday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),6,14);
+add_slots(164,'Tuesday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),12,14);
+add_slots(165,'Wednesday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),2,14);
+add_slots(166,'Thursday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),3,14);
+add_slots(167,'Friday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),7,14);
+add_slots(168,'Saturday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),10,14);
+add_slots(169,'Sunday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),1,14);
+add_slots(170,'Monday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),17,15);
+add_slots(171,'Tuesday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),19,15);
+add_slots(172,'Wednesday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),1,15);
+add_slots(173,'Thursday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),3,15);
+add_slots(174,'Friday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),14,15);
+add_slots(175,'Saturday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),15,15);
+add_slots(176,'Sunday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),9,15);
+add_slots(177,'Monday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),10,15);
+add_slots(178,'Tuesday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),7,15);
+add_slots(179,'Wednesday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),7,15);
+add_slots(180,'Thursday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),16,15);
+add_slots(181,'Friday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),10,15);
+add_slots(182,'Saturday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),4,15);
+add_slots(183,'Sunday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),7,15);
+add_slots(184,'Monday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),10,16);
+add_slots(185,'Tuesday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),7,16);
+add_slots(186,'Wednesday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),9,16);
+add_slots(187,'Thursday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),1,16);
+add_slots(188,'Friday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),16,16);
+add_slots(189,'Saturday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),5,16);
+add_slots(190,'Sunday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),13,16);
+add_slots(191,'Monday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),14,16);
+add_slots(192,'Tuesday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),9,16);
+add_slots(193,'Wednesday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),4,16);
+add_slots(194,'Thursday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),15,16);
+add_slots(195,'Friday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),11,16);
+add_slots(196,'Saturday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),15,16);
+add_slots(197,'Sunday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),15,16);
+add_slots(198,'Monday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),3,17);
+add_slots(199,'Tuesday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),1,17);
+add_slots(200,'Wednesday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),10,17);
+add_slots(201,'Thursday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),4,17);
+add_slots(202,'Friday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),14,17);
+add_slots(203,'Saturday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),4,17);
+add_slots(204,'Sunday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),15,17);
+add_slots(205,'Monday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),14,17);
+add_slots(206,'Tuesday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),11,17);
+add_slots(207,'Wednesday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),11,17);
+add_slots(208,'Thursday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),18,17);
+add_slots(209,'Friday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),5,17);
+add_slots(210,'Saturday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),1,17);
+add_slots(211,'Sunday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),12,17);
+add_slots(212,'Monday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),1,18);
+add_slots(213,'Tuesday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),19,18);
+add_slots(214,'Wednesday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),12,18);
+add_slots(215,'Thursday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),10,18);
+add_slots(216,'Friday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),3,18);
+add_slots(217,'Saturday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),1,18);
+add_slots(218,'Sunday',to_timestamp('01-APR-21 06.00.00.000000000 AM','DD-MON-RR HH.MI.SSXFF AM'),2,18);
+add_slots(219,'Monday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),16,18);
+add_slots(220,'Tuesday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),10,18);
+add_slots(221,'Wednesday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),5,18);
+add_slots(222,'Thursday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),8,18);
+add_slots(223,'Friday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),10,18);
+add_slots(224,'Saturday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),5,18);
+add_slots(225,'Sunday',to_timestamp('01-APR-21 02.00.00.000000000 PM','DD-MON-RR HH.MI.SSXFF AM'),0,18);
+END;    
+
+
+BEGIN
+add_sub_location (10,'A',1);
+add_sub_location (11,'B',1);
+add_sub_location (12,'C',1);
+add_sub_location (13,'A',2);
+add_sub_location (14,'B',2);
+add_sub_location (15,'C',2);
+add_sub_location (16,'A',3);
+add_sub_location (17,'B',3);
+add_sub_location (18,'C',3);
+END;
+
+
+
+
+
+
+
+
+
+
 --PROC for booking a slot --
 
 Create or replace procedure Book_slot (pi_fm_id int, pi_slot_id int, po_booking_id out int)
@@ -502,3 +953,44 @@ declare po_book_id INT := 0;
 BEGIN
 BOOK_SLOT (2,101,po_book_id);
 END;
+
+
+--View Creation------
+
+CREATE or replace VIEW CatchBYLocation
+AS
+(SELECT f.loc_name,sum(a.catch_qty)as Total_Catches ---,B.checkin_id,c.booking_id,d.slot_id,e.subloc_id,A.checkin_id
+FROM checkout_log A
+INNER JOIN checkin_log B ON a.checkin_id=b.checkin_id
+INNER JOIN bookings C ON b.booking_id=c.booking_id
+INNER JOIN slots D ON c.slot_id=d.slot_id
+INNER JOIN sub_location E ON d.subloc_id=e.subloc_id
+INNER JOIN location F ON e.loc_id=f.loc_id
+group by f.loc_name);
+
+
+CREATE or replace VIEW CATCHQTY
+AS
+SELECT A.FM_ID,A.FIRST_NAME||''||A.lAST_NAME AS FISHERMAN_NAME,b.booking_id,c.checkin_id,sum(d.catch_qty) as Total_Catches
+FROM fisherman A
+INNER JOIN bookings B ON A.FM_ID=B.FM_ID
+INNER JOIN checkin_log C ON b.booking_id=c.booking_id
+INNER JOIN checkout_log D ON d.checkin_id=c.checkin_id
+group by a.fm_id,a.first_name, a.last_name, b.booking_id, c.checkin_id
+order by a.fm_id;
+
+
+CREATE or REPLACE VIEW lastfeeddatebyspeciesname
+AS
+SELECT a.species_name,i.last_feed_date
+FROM fish_species A
+INNER JOIN fish_stats B ON a.fish_id=b.fish_id
+INNER JOIN checkout_log C ON b.fish_inv_id=c.fish_inv_id
+INNER JOIN checkin_log D ON c.checkin_id=d.checkin_id
+INNER JOIN bookings E ON d.booking_id=e.booking_id
+INNER JOIN slots F ON f.slot_id=e.slot_id
+INNER JOIN sub_location G ON f.subloc_id=g.subloc_id
+INNER JOIN location H ON g.loc_id=h.loc_id
+INNER JOIN loc_stats I ON h.loc_id=i.loc_id
+group by a.species_name,i.last_feed_date
+order by i.last_feed_date;
