@@ -27,6 +27,8 @@ END;
 
 select * from location;
 
+
+
 --PROC for booking a slot --
 
 Create or replace procedure Book_slot (pi_fm_id int, pi_slot_id int, po_booking_id out int)
