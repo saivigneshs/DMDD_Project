@@ -264,7 +264,7 @@ FROM lastfeeddatebyspeciesname;
 
 
 -------------
-CREATE OR REPLACE VIEW populor_fish
+CREATE OR REPLACE VIEW popular_fish
 AS
 SELECT a.species_name,sum(c.catch_qty)as Total_Catches
 FROM fish_species A
@@ -276,4 +276,18 @@ ORDER BY Total_Catches desc
 
 SELECT
 *
-FROM populor_fish;
+FROM popular_fish;
+
+---------------------------
+CREATE OR REPLACE VIEW BusyToDull
+AS
+
+SELECT  count(*) as Total_booking, b.day_of_week
+FROM bookings A INNER JOIN slots B ON a.slot_id = b.slot_id
+GROUP BY b.day_of_week
+ORDER BY Total_booking desc
+;
+
+SELECT
+    *
+FROM BusyToDull;
