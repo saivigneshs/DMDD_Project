@@ -1,17 +1,17 @@
 set serveroutput on;
 CREATE OR REPLACE PACKAGE INSERT
     AS
-        PROCEDURE INSERT.add_location(pi_loc_id NUMBER, pi_loc_name VARCHAR2);
-        PROCEDURE INSERT.add_fisherman(pi_fm_id NUMBER, pi_fname VARCHAR2 , pi_lname VARCHAR2, pi_age NUMBER, pi_gender VARCHAR2, pi_exp NUMBER, pi_mob VARCHAR2, pi_email VARCHAR2);
-        PROCEDURE INSERT.add_fisherman_DETAILS(pi_fm_id NUMBER, pi_addr1 VARCHAR2 , pi_addr2 VARCHAR2, pi_city VARCHAR2, pi_state VARCHAR2, pi_zip VARCHAR2);
-        PROCEDURE INSERT.add_fish_species(pi_FISH_ID NUMBER, pi_SPECIES_NAME VARCHAR2, pi_AVG_LENGTH FLOAT, pi_AVG_WEIGHTD FLOAT );
-        PROCEDURE INSERT.add_bookings(pi_BOOKING_ID NUMBER, pi_FM_ID NUMBER, pi_SLOT_ID NUMBER, pi_BOOKING_TIME TIMESTAMP, pi_BOOK_STATUS VARCHAR2);
-        PROCEDURE INSERT.add_slots(pi_SLOT_ID NUMBER, pi_DAY_OF_WEEK VARCHAR2, pi_SLOT_TIME TIMESTAMP, pi_SLOT_COUNT NUMBER, pi_SUBLOC_ID NUMBER);
-        PROCEDURE INSERT.add_sub_location(pi_SUBLOC_ID NUMBER, pi_SUBLOC_NAME VARCHAR2, pi_LOC_ID NUMBER);
-        PROCEDURE INSERT.add_location_STATS(pi_loc_id NUMBER, pi_cur_date DATE, pi_is_insect_seined VARCHAR2, pi_water_temp NUMBER, pi_last_decon_time TIMESTAMP, pi_o2_conc_level NUMBER, pi_nh4_conc_level NUMBER, pi_last_feed_date TIMESTAMP);
-        PROCEDURE INSERT.add_fish_stats(pi_fish_inv_id NUMBER, pi_fish_id NUMBER, pi_tot_fish_qty NUMBER, pi_cur_date DATE, pi_subLoc_id NUMBER);
-        PROCEDURE INSERT.add_checkin_log(pi_booking_id NUMBER, pi_checkin_id NUMBER, pi_entry_time TIMESTAMP, pi_covid_result VARCHAR2, pi_ppe_available VARCHAR2, pi_fm_id NUMBER);
-        PROCEDURE INSERT.add_checkout_log(pi_checkin_id NUMBER, pi_fish_inv_id NUMBER, pi_catch_qty NUMBER, pi_checkout_time TIMESTAMP);
+        PROCEDURE add_location(pi_loc_id NUMBER, pi_loc_name VARCHAR2);
+        PROCEDURE add_fisherman(pi_fm_id NUMBER, pi_fname VARCHAR2 , pi_lname VARCHAR2, pi_age NUMBER, pi_gender VARCHAR2, pi_exp NUMBER, pi_mob VARCHAR2, pi_email VARCHAR2);
+        PROCEDURE add_fisherman_DETAILS(pi_fm_id NUMBER, pi_addr1 VARCHAR2 , pi_addr2 VARCHAR2, pi_city VARCHAR2, pi_state VARCHAR2, pi_zip VARCHAR2);
+        PROCEDURE add_fish_species(pi_FISH_ID NUMBER, pi_SPECIES_NAME VARCHAR2, pi_AVG_LENGTH FLOAT, pi_AVG_WEIGHTD FLOAT );
+        PROCEDURE add_bookings(pi_BOOKING_ID NUMBER, pi_FM_ID NUMBER, pi_SLOT_ID NUMBER, pi_BOOKING_TIME TIMESTAMP, pi_BOOK_STATUS VARCHAR2);
+        PROCEDURE add_slots(pi_SLOT_ID NUMBER, pi_DAY_OF_WEEK VARCHAR2, pi_SLOT_TIME TIMESTAMP, pi_SLOT_COUNT NUMBER, pi_SUBLOC_ID NUMBER);
+        PROCEDURE add_sub_location(pi_SUBLOC_ID NUMBER, pi_SUBLOC_NAME VARCHAR2, pi_LOC_ID NUMBER);
+        PROCEDURE add_location_STATS(pi_loc_id NUMBER, pi_cur_date DATE, pi_is_insect_seined VARCHAR2, pi_water_temp NUMBER, pi_last_decon_time TIMESTAMP, pi_o2_conc_level NUMBER, pi_nh4_conc_level NUMBER, pi_last_feed_date TIMESTAMP);
+        PROCEDURE add_fish_stats(pi_fish_inv_id NUMBER, pi_fish_id NUMBER, pi_tot_fish_qty NUMBER, pi_cur_date DATE, pi_subLoc_id NUMBER);
+        PROCEDURE add_checkin_log(pi_booking_id NUMBER, pi_checkin_id NUMBER, pi_entry_time TIMESTAMP, pi_covid_result VARCHAR2, pi_ppe_available VARCHAR2, pi_fm_id NUMBER);
+        PROCEDURE add_checkout_log(pi_checkin_id NUMBER, pi_fish_inv_id NUMBER, pi_catch_qty NUMBER, pi_checkout_time TIMESTAMP);
         
     END INSERT;
 /
