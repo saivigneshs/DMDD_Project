@@ -6,9 +6,9 @@ Professor Name : Naveen Kuragayala
 Team Number : 9
 Project Topic : Fisheries Management System 
 Team Members :
-> Saivignesh Sridhar
-> Vignesh Haribalakrishnan
-> Vishal Narasimhan
+* Saivignesh Sridhar
+* Vignesh Haribalakrishnan
+* Vishal Narasimhan
 
 Business problems:
 * Exploitation by over-fishing and unethical means of fishing has taken a huge toll on
